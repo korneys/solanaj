@@ -114,7 +114,7 @@ public class TokenProgram extends Program {
             AssociatedTokenProgram.PROGRAM_ID,
             keys,
             buffer.array()
-        )
+        );
     }
     
     public static TransactionInstruction closeAccount(final PublicKey source, final PublicKey destination, final PublicKey owner) {
