@@ -17,6 +17,7 @@ public class TokenProgram extends Program {
     public static final PublicKey PROGRAM_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
     private static final PublicKey SYSVAR_RENT_PUBKEY = new PublicKey("SysvarRent111111111111111111111111111111111");
 
+    private static final int CREATE_METHOD_ID = 0;
     private static final int INITIALIZE_METHOD_ID = 1;
     private static final int TRANSFER_METHOD_ID = 3;
     private static final int CLOSE_ACCOUNT_METHOD_ID = 9;
@@ -89,6 +90,33 @@ public class TokenProgram extends Program {
         );
     }
 
+    public static TransactionInstruction createAccount(
+        final PublicKey associatedToken,
+        final PublicKey payer,
+        final PublicKey mint,
+        final PublicKey owner
+    ) {
+        final List<AccountMeta> keys = new ArrayList<>();
+
+        keys.add(AccountMeta(payer, true, true));
+        keys.add(AccountMeta(associatedToken, false, true));
+        keys.add(AccountMeta(owner, false, false));
+        keys.add(AccountMeta(mint, false, false));
+        keys.add(AccountMeta(SystemProgram.PROGRAM_ID, false, false));
+        keys.add(AccountMeta(TokenProgram.PROGRAM_ID, false, false));
+        keys.add(AccountMeta(SYSVAR_RENT_PUBKEY, false, false));
+
+        ByteBuffer buffer = ByteBuffer.allocate(1);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        buffer.put((byte) CREATE_METHOD_ID);
+
+        return createTransactionInstruction(
+            AssociatedTokenProgram.PROGRAM_ID,
+            keys,
+            buffer.array()
+        )
+    }
+    
     public static TransactionInstruction closeAccount(final PublicKey source, final PublicKey destination, final PublicKey owner) {
         final List<AccountMeta> keys = new ArrayList<>();
 
