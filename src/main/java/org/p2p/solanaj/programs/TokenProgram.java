@@ -98,13 +98,13 @@ public class TokenProgram extends Program {
     ) {
         final List<AccountMeta> keys = new ArrayList<>();
 
-        keys.add(AccountMeta(payer, true, true));
-        keys.add(AccountMeta(associatedToken, false, true));
-        keys.add(AccountMeta(owner, false, false));
-        keys.add(AccountMeta(mint, false, false));
-        keys.add(AccountMeta(SystemProgram.PROGRAM_ID, false, false));
-        keys.add(AccountMeta(TokenProgram.PROGRAM_ID, false, false));
-        keys.add(AccountMeta(SYSVAR_RENT_PUBKEY, false, false));
+        keys.add(new AccountMeta(payer, true, true));
+        keys.add(new AccountMeta(associatedToken, false, true));
+        keys.add(new AccountMeta(owner, false, false));
+        keys.add(new AccountMeta(mint, false, false));
+        keys.add(new AccountMeta(SystemProgram.PROGRAM_ID, false, false));
+        keys.add(new AccountMeta(TokenProgram.PROGRAM_ID, false, false));
+        keys.add(new AccountMeta(SYSVAR_RENT_PUBKEY, false, false));
 
         ByteBuffer buffer = ByteBuffer.allocate(1);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
