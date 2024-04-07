@@ -21,12 +21,12 @@ public class RpcSendTransactionConfig {
     }
 
     @Json(name = "encoding")
-    private Encoding encoding = Encoding.base64;
+    public Encoding encoding = Encoding.base64;
 
     @Json(name ="skipPreflight")
-    private boolean skipPreFlight = true;
+    public boolean skipPreFlight = true;
 
     @Json(name = "maxRetries")
-    private long maxRetries = 0;
+    public long maxRetries = 0;
 
 }
