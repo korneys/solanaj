@@ -22,6 +22,7 @@ public class TokenProgram extends Program {
      */
     public static final PublicKey SYSVAR_RENT_PUBKEY = new PublicKey("SysvarRent111111111111111111111111111111111");
 
+    private static final int CREATE_METHOD_ID = 0;
     private static final int INITIALIZE_MINT_METHOD_ID = 0;
     private static final int INITIALIZE_ACCOUNT_METHOD_ID = 1;
     private static final int INITIALIZE_MULTISIG_METHOD_ID = 2;
@@ -35,6 +36,33 @@ public class TokenProgram extends Program {
     private static final int FREEZE_ACCOUNT_METHOD_ID = 10;
     private static final int THAW_ACCOUNT_METHOD_ID = 11;
     private static final int TRANSFER_CHECKED_METHOD_ID = 12;
+
+    public static TransactionInstruction createAccount(
+        final PublicKey associatedToken,
+        final PublicKey payer,
+        final PublicKey mint,
+        final PublicKey owner
+    ) {
+        final List<AccountMeta> keys = new ArrayList<>();
+
+        keys.add(new AccountMeta(payer, true, true));
+        keys.add(new AccountMeta(associatedToken, false, true));
+        keys.add(new AccountMeta(owner, false, false));
+        keys.add(new AccountMeta(mint, false, false));
+        keys.add(new AccountMeta(SystemProgram.PROGRAM_ID, false, false));
+        keys.add(new AccountMeta(TokenProgram.PROGRAM_ID, false, false));
+        keys.add(new AccountMeta(SYSVAR_RENT_PUBKEY, false, false));
+
+        ByteBuffer buffer = ByteBuffer.allocate(1);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        buffer.put((byte) CREATE_METHOD_ID);
+
+        return createTransactionInstruction(
+            AssociatedTokenProgram.PROGRAM_ID,
+            keys,
+            buffer.array()
+        );
+    }
 
     /**
      * Transfers an SPL token from the owner's source account to destination account.
