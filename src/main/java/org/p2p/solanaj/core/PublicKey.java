@@ -74,10 +74,13 @@ public class PublicKey {
                 if (seed.length > 32) {
                     throw new IllegalArgumentException("Max seed length exceeded: " + seed.length);
                 }
-                buffer.write(seed);
+                buffer.write(seed, 0, seed.length);
             }
-            buffer.write(programId.toByteArray());
-            buffer.write("ProgramDerivedAddress".getBytes());
+            byte[] array2 = programId.toByteArray();
+            buffer.write(array2, 0, array2.length);
+
+            byte[] array3 = "ProgramDerivedAddress".getBytes();
+            buffer.write(array3, 0, array3.length);
 
             byte[] hash = Sha256Hash.hash(buffer.toByteArray());
 
